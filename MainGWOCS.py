@@ -50,7 +50,7 @@ from py_hybrid_function.func_plot import *
 # Number of search agents
 SearchAgents_no = 20
 # Name of the test function
-Function_name = 'p075_Sphere'
+Function_name = 'p001_Ackley'
 # Maximum number of iterations
 Max_iteration = 500
 

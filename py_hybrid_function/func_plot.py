@@ -47,6 +47,8 @@ def func_plot(Function_name):
         Lb = -35
         Ub = 35
         ptype = 1
+        x = np.arange(-100, 100, 2)
+        y = np.arange(-100, 100, 2)
     if Function_name == 'p002_Alpine':
         d = 20
         Fun = lambda x: p002_Alpine(x)
