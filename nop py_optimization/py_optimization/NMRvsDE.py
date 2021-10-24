@@ -1,0 +1,88 @@
+"""
+#==================================================================================================#
+# Differential Evolution (DE) and Naked Mole Rat Algorithm (NMRA) comparison demo with             #
+# Appendix A: Test Function Benchmark                                                              #
+# This work has been done by:                                                                      #
+# 1. Nguyen Anh Khoa - 1810240                                                                     #
+# 2. Phan Vuong Phu - 1710235                                                                      #
+# 3. Trang Si Tan Khang - 1810215                                                                  #
+#                                                                                                  #
+# You can simply define your cost in a separate file and load its handle to fobj                   #
+# ________________________________________________________________________________________________ #
+# Provided Benchmark functions that we have tested:                                                #
+# 001. p001_Ackley: Ackley Function                                                                #
+# 002. p002_Alpine: Alpine Function                                                                #
+# 003. p003_BartelsConn: Bartels Conn Function                                                     #
+# 005. p005_Bird: Bird Function                                                                    #
+# 006. p006_Bohachevsky: Bohachevsky Function                                                      #
+# 007. p007_Booth: Booth Function                                                                  #
+# 010. p010_Brent: Brent Function                                                                  #
+# 011. p011_Brown: Brown Function                                                                  #
+# 012. p012_Bukin: Bukin Function                                                                  #
+# 019. p019_CosineMixture: Cosine Mixture Function                                                 #
+# 020. p020_Csendes: Csendes Function                                                              #
+# 023. p023_Deb: Deb Function                                                                      #
+# 030. p030_Exponential: Exponential Function                                                      #
+# 032. p032_Griewank: Griewank Function                                                            #
+# 037. p037_Hosaki: Hosaki Function                                                                #
+# 045. p045_Mishra: Mishra Function                                                                #
+# 054. p054_PowellSum: PowellSum Function                                                          #
+# 057. p057_Quartic: Quartic Function                                                              #
+# 058. p058_Quintic: Quintic Function                                                              #
+# 065. p065_Salomon: Salomon Function                                                              #
+# 071. p071_SchumerSteiglitz: SchumerSteiglitz Function                                            #
+# 075. p075_Sphere: Sphere Function                                                                #
+# 076. p076_Step: Step Function                                                                    #
+# 077. p077_Stepint: Stepint Function                                                              #
+# 079. p079_SumSquares: SumSquares Function                                                        #
+# 080. p080_StyblinskiTang: Styblinski - Tang Function                                             #
+# 096. p096_XinSheYangSecond: XinSheYangSecond Function                                            #
+# 098. p098_XinSheYangFourth: XinSheYangFourth Function                                            #
+# 100. p100_Zakharov: Zakharov Function                                                            #
+#==================================================================================================#
+"""
+import matplotlib.pyplot as plt
+from py_function.DE import *
+from py_function.NMRA import *
+
+NMR_pop = 20                     # Number of NMRs
+Function_Name = ' p080_StyblinskiTangt'    # Name of the test function
+Max_iteration = 10000              # Maximum number of iterations
+
+# DE Part:
+F = 0.5                          # Define scale factor for mutation
+cr = 0.7                         # Define crossover rate for recombination
+solution = DE(Function_Name, NMR_pop, Max_iteration, F, cr)
+
+# NMR Part:
+(Best_NMR, Best_NMRpos, cg_curve, ptype) = NMRA(Function_Name, Max_iteration, NMR_pop)
+
+'----------------------------------------------------------------------------------------------------------------------'
+# Draw objective space
+Algorithm = 'DE_and_NMR_comparison'
+Label = Function_Name
+filename_Figure = Algorithm + '_' + Label + '.pdf'
+plt.rc('text', usetex=True)
+plt.rc('font', family='Segoe UI')
+'Plot the convergence history'
+SF = 14 # Scale factor
+fig, ax = plt.subplots()
+# line plot of best objective function values
+
+if solution[3] == 0:
+    ax.semilogy(cg_curve, label="NMR", color='b', linewidth=3)
+    ax.semilogy(solution[2], label = "DE", color = 'r', linestyle = '-.', linewidth=2)
+else:
+    ax.plot(cg_curve, label="NMR", color='b', linewidth=3)
+    ax.plot(solution[2], label = "DE", color = 'r', linestyle='-.', linewidth=2)
+ax.set_title('Convergence curve', fontname = "Segoe UI", fontsize=SF, color='k')
+plt.xlabel('Iteration', fontname = "Segoe UI", fontsize=SF, color='k')
+plt.ylabel('Best score obtained so far', fontname = "Segoe UI", fontsize=SF, color='k')
+leg = plt.legend(loc = 'upper right')
+plt.show()
+fig.savefig(filename_Figure, dpi=1000)
+# Display the calculation
+print('The best solution obtained by DE is: ', str(solution[1]))
+print('The best optimal value of the objective function found by DE is: ', str(solution[0]))
+print('The best solution obtained by NMRA is: ', str(Best_NMRpos))
+print('The best optimal value of the objective function found by NMRA is: ', str(Best_NMR))
