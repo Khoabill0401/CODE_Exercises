@@ -1,0 +1,25 @@
+Nhiệm vụ: Hybrid 2 thuật toán tối ưu.
+Ví dụ:
+FA + DE
++ Phân tích:
+FA phụ thuộc vào hướng random
+DE cần nhiều vòng lặp
+Sau khi lai -> HFADE giải quyết được hàm đa chiều hơn (ma trận bậc cao)
+FA:
+Quan trọng nằm ở tính hướng di chuyển ở bước tìm Distance.
+
+DE: 
+Tham số F và CR quyết định độ tối ưu thuật toán.
+Bước quan trọng là Mutation.
+
++ Hybrid:
+FA chia làm 2 hướng:
+- Những result tốt
+- Những result xấu -> Thay vì cho kết quả xấu sẽ được cải tiến bởi DE
+Phần Mutation và Crossover của thuật toán DE sẽ lai local best của FA
+Sau đó đưa vào không gian nghiệm và so sánh, nếu tốt hơn sẽ chọn không thì loại
+
++ Kiểm tra vòng lặp -> Nếu đủ in nghiệm tốt nhất.
+
+
+
