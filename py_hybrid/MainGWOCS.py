@@ -51,7 +51,7 @@ from py_hybrid_function.func_plot import *
 # Number of search agents
 SearchAgents_no = 20
 # Name of the test function
-Function_name = 'p005_Bird'
+Function_name = 'p006_Bohachevsky'
 # Maximum number of iterations
 Max_iteration = 500
 
@@ -81,24 +81,29 @@ plt.rc('font', family='Segoe UI')
 'Plot the convergence history'
 SF = 14 # Scale factor
 
-fig, (ax1, ax2) = plt.subplots(1, 2)
+#fig, (ax1, ax2) = plt.subplots(1, 2)
+fig = plt.figure()   #figsize=plt.figaspect(2.))
+fig.suptitle('Comparison of GWO and GWOCS')
 
 #Plot 3D
-ax1 = fig.add_subplot(121, projection = '3d')
-ax1.plot_surface(PlotX, PlotY, PlotZ, cmap = 'viridis')
-ax1.set_title('3D Graph', fontname = "Segoe UI", fontsize = SF, color = 'k')
+ax = fig.add_subplot(121, projection = '3d')
+surf = ax.plot_surface(PlotX, PlotY, PlotZ, cmap = 'viridis', rstride=1, cstride=1, linewidth=0, antialiased=False)
+ax.set_title('3D Graph', fontname = "Segoe UI", fontsize = SF, color = 'k')
+
+fig.tight_layout(pad=4.0)
 
 # line plot of best objective function values
+ax = fig.add_subplot(122)
 if ptype == 0:
-    ax2.semilogy(GWO_cg_curve, label="GWO", color='b', linewidth=3)
-    ax2.semilogy(GWOCS_cg_curve, label = "GWOCS", color = 'r', linestyle = '-.', linewidth=2)
+    ax.semilogy(GWO_cg_curve, label="GWO", color='b', linewidth=3)
+    ax.semilogy(GWOCS_cg_curve, label = "GWOCS", color = 'r', linestyle = '-.', linewidth=2)
 else:
-    ax2.plot(GWO_cg_curve, label="GWO", color='b', linewidth=3)
-    ax2.plot(GWOCS_cg_curve, label = "GWOCS", color = 'r', linestyle='-.', linewidth=2)
-ax2.set_title('Convergence curve', fontname = "Segoe UI", fontsize=SF, color='k')
-ax2.set_xlabel('Iteration', fontname = "Segoe UI", fontsize=SF, color='k')
-ax2.set_ylabel('Best score obtained so far', fontname = "Segoe UI", fontsize=SF, color='k')
-leg = ax2.legend(loc = 'upper right')
+    ax.plot(GWO_cg_curve, label="GWO", color='b', linewidth=3)
+    ax.plot(GWOCS_cg_curve, label = "GWOCS", color = 'r', linestyle='-.', linewidth=2)
+ax.set_title('Convergence curve', fontname = "Segoe UI", fontsize=SF, color='k')
+ax.set_xlabel('Iteration', fontname = "Segoe UI", fontsize=SF, color='k')
+ax.set_ylabel('Best score obtained so far', fontname = "Segoe UI", fontsize=SF, color='k')
+leg = ax.legend(loc = 'upper right')
 plt.show()
 fig.savefig(filename_Figure, dpi=1000)
 # Display the calculation

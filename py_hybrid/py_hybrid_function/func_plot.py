@@ -58,11 +58,9 @@ def func_plot(Function_name):
         x = np.arange(-50, 50, 2)
         y = np.arange(-50, 50, 2)
     if Function_name == 'p006_Bohachevsky':
-        d = 2
         Fun = lambda x: p006_Bohachevsky(x)
-        Lb = -100
-        Ub = 100
-        ptype = 1
+        x = np.arange(-100, 100, 2)
+        y = np.arange(-100, 100, 2)
     if Function_name == 'p007_Booth':
         d = 2
         Fun = lambda x: p007_Booth(x)
