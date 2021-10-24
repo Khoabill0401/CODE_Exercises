@@ -42,31 +42,21 @@ from py_hybrid_function.p100_Zakharov import *
 def func_plot(Function_name):
     # Determine what benchmark function
     if Function_name == 'p001_Ackley':
-        d = 30
         Fun = lambda x: p001_Ackley(x)
-        Lb = -35
-        Ub = 35
-        ptype = 1
-        x = np.arange(-100, 100, 2)
-        y = np.arange(-100, 100, 2)
+        x = np.arange(-50, 50, 2)
+        y = np.arange(-50, 50, 2)
     if Function_name == 'p002_Alpine':
-        d = 20
         Fun = lambda x: p002_Alpine(x)
-        Lb = -10
-        Ub = 10
-        ptype = 1
+        x = np.arange(-50, 50, 2)
+        y = np.arange(-50, 50, 2)
     if Function_name == 'p003_BartelsConn':
-        d = 2
         Fun = lambda x: p003_BartelsConn(x)
-        Lb = -500
-        Ub = 500
-        ptype = 1
+        x = np.arange(-500, 500, 2)
+        y = np.arange(-500, 500, 2)
     if Function_name == 'p005_Bird':
-        d = 2
         Fun = lambda x: p005_Bird(x)
-        Lb = -2 * np.pi
-        Ub = 2 * np.pi
-        ptype = 1
+        x = np.arange(-50, 50, 2)
+        y = np.arange(-50, 50, 2)
     if Function_name == 'p006_Bohachevsky':
         d = 2
         Fun = lambda x: p006_Bohachevsky(x)
@@ -176,11 +166,7 @@ def func_plot(Function_name):
         Ub = 10
         ptype = 0
     if Function_name == 'p075_Sphere':
-        d = 30
         Fun = lambda x: p075_Sphere(x)
-        Lb = 0
-        Ub = 10
-        ptype = 0
         x = np.arange(-100, 100, 2)
         y = np.arange(-100, 100, 2)
     if Function_name == 'p076_Step':

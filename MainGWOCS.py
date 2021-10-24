@@ -42,6 +42,7 @@
 # 100. p100_Zakharov: Zakharov Function                                                #
 # ==================================================================================== #
 """
+import time
 import matplotlib.pyplot as plt
 from py_hybrid_function.GWO import *
 from py_hybrid_function.GWO_CS import *
@@ -50,17 +51,23 @@ from py_hybrid_function.func_plot import *
 # Number of search agents
 SearchAgents_no = 20
 # Name of the test function
-Function_name = 'p001_Ackley'
+Function_name = 'p005_Bird'
 # Maximum number of iterations
 Max_iteration = 500
 
 # Load details of the selected benchmark function
 
 # GWO part:
+start_time = time.time()
 (Best_score, Best_pos, GWO_cg_curve, ptype) = GWO(Function_name, Max_iteration, SearchAgents_no)
+print("Executation time for GWO:")
+print("--- %s seconds ---" % (time.time() - start_time))
 
 # GWO_CS part:
+start_time = time.time()
 (Best_score_CS, Best_pos_CS, GWOCS_cg_curve, ptype) = GWO_CS(Function_name, Max_iteration, SearchAgents_no)
+print("Executation time for GWOCS:")
+print("--- %s seconds ---" % (time.time() - start_time))
 
 # Plot
 (PlotX, PlotY, PlotZ) = func_plot(Function_name)
