@@ -11,8 +11,8 @@ def solve10bar(x):
     Label = '10_bar'
 
     for i in range(NP):
-        if Label == '10_bar':
-            (W, c1, c2, c3, frequencies) = FEM_10_bar_2D(x[:])
+        #if Label == '10_bar':
+        (W, c1, c2, c3, frequencies) = FEM_10_bar_2D(x[:])
 
         f[i, 0] = W
         c[i, 0:3] = [c1, c2, c3]

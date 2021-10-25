@@ -44,7 +44,11 @@
 # ==================================================================================== #
 """
 import math
+from math import inf
 import numpy as np
+from numpy import zeros
+from numpy import logical_not
+from numpy.random import rand
 import random
 from py_hybrid_function.initialization import *
 from py_hybrid_function.p001_Ackley import *
@@ -273,14 +277,12 @@ def GWO(Function_name, Max_iteration, SearchAgents_no):
     # Main calculation
     dim = d
     # Initialize alpha, beta and delta_pos
-    Alpha_pos = np.zeros((1, dim), dtype = float)
-    Alpha_score = float(math.inf)   # change this to - float(math.inf) for maximization problems
-
-    Beta_pos = np.zeros((1, dim), dtype = float)
-    Beta_score = float(math.inf)    # change this to - float(math.inf) for maximization problems
-
-    Delta_pos = np.zeros((1, dim), dtype = float)
-    Delta_score = float(math.inf)   # change this to - float(math.inf) for maximization problems
+    Alpha_pos = zeros((1, dim), dtype = float)
+    Beta_pos  = zeros((1, dim), dtype = float)
+    Delta_pos = zeros((1, dim), dtype = float)
+    Alpha_score = float(inf)    # change this to - float(math.inf) for maximization problems
+    Beta_score  = float(inf)
+    Delta_score = float(inf)
 
     # Initialize the positions of search agents
     #if Function_name == "solve10bar":
@@ -293,7 +295,7 @@ def GWO(Function_name, Max_iteration, SearchAgents_no):
 
     Positions = initialization(SearchAgents_no, dim, Ub, Lb)
 
-    Convergence_curve = np.zeros((Max_iteration), dtype = float)
+    Convergence_curve = zeros((Max_iteration), dtype = float)
     l = 0  # Loop counter
 
     # Main loop
@@ -303,7 +305,7 @@ def GWO(Function_name, Max_iteration, SearchAgents_no):
             # Return back the search agents that go beyond the boundaries of the search space
             Flag4Ub = Positions[j, :] > Ub
             Flag4Lb = Positions[j, :] < Lb
-            Positions[j, :] = (Positions[j, :]*np.logical_not(Flag4Ub + Flag4Lb)) + (Ub*Flag4Ub) + (Lb*Flag4Lb)
+            Positions[j, :] = (Positions[j, :]*logical_not(Flag4Ub + Flag4Lb)) + (Ub*Flag4Ub) + (Lb*Flag4Lb)
 
             # Calculate objective function for each search agent
             fitness = Fun(Positions[j, :]).copy()
@@ -349,8 +351,8 @@ def GWO(Function_name, Max_iteration, SearchAgents_no):
         for ii in range(len(Positions)):
             for j in range(len(Positions[0])):
 
-                r1 = np.random.rand()  # r1 is a random number in [0, 1]
-                r2 = np.random.rand()  # r2 is a random number in [0, 1]
+                r1 = rand()  # r1 is a random number in [0, 1]
+                r2 = rand()  # r1 is a random number in [0, 1]
 
                 A1 = 2*a*r1 - a # Equation (3.3)
                 C1 = 2*r2       # Equation (3.4)
@@ -360,8 +362,8 @@ def GWO(Function_name, Max_iteration, SearchAgents_no):
                 # Equation (3.6) - Part 1
                 X1 = Alpha_pos[j] - A1*D_alpha
 
-                r1 = np.random.rand()  # r1 is a random number in [0, 1]
-                r2 = np.random.rand()  # r2 is a random number in [0, 1]
+                r1 = rand()  # r1 is a random number in [0, 1]
+                r2 = rand()  # r1 is a random number in [0, 1]
 
                 A2 = 2 * a * r1 - a  # Equation (3.3)
                 C2 = 2 * r2  # Equation (3.4)
@@ -371,8 +373,8 @@ def GWO(Function_name, Max_iteration, SearchAgents_no):
                 # Equation (3.6) - Part 2
                 X2 = Beta_pos[j] - A2 * D_beta
 
-                r1 = np.random.rand()  # r1 is a random number in [0, 1]
-                r2 = np.random.rand()  # r2 is a random number in [0, 1]
+                r1 = rand()  # r1 is a random number in [0, 1]
+                r2 = rand()  # r1 is a random number in [0, 1]
 
                 A3 = 2 * a * r1 - a  # Equation (3.3)
                 C3 = 2 * r2  # Equation (3.4)

@@ -7,11 +7,12 @@
 # ==================================================================================== #
 """
 import numpy as np
+from numpy import logical_not
 
 def simplebounds(s, Lb, Ub):
 
     Flag4Ub = s > Ub
     Flag4Lb = s < Lb
-    s = s*np.logical_not(Flag4Ub + Flag4Lb) + Ub*Flag4Ub + Lb*Flag4Lb
+    s = s*logical_not(Flag4Ub + Flag4Lb) + Ub*Flag4Ub + Lb*Flag4Lb
 
     return (s)

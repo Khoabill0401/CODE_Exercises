@@ -41,8 +41,12 @@
 # ==================================================================================== #
 """
 import math
+from math import inf
 import numpy as np
 import random
+from numpy import zeros
+from numpy.random import rand
+from numpy import logical_not
 from py_hybrid_function.get_cuckoos import *
 from py_hybrid_function.initialization import *
 from py_hybrid_function.p001_Ackley import *
@@ -272,29 +276,29 @@ def GWO_CS(Function_name, Max_iteration, SearchAgents_no):
     # dim = 2,  Ub = x,  Lb = 1,  Max_iteration = 10
     # SearchAgents_no = 10
     # p = initialization(SearchAgents_no, dim, Ub, Lb)
-    Alpha_pos = np.zeros((1, dim), dtype = float)
-    Alpha_score = float(math.inf)  # change this to - float(math.inf) for maximization problems
+    Alpha_pos = zeros((1, dim), dtype = float)
+    Alpha_score = float(inf)  # change this to - float(math.inf) for maximization problems
 
-    Beta_pos = np.zeros((1, dim), dtype = float)
-    Beta_score = float(math.inf)    # change this to - float(math.inf) for maximization problems
+    Beta_pos = zeros((1, dim), dtype = float)
+    Beta_score = float(inf)    # change this to - float(math.inf) for maximization problems
 
-    Delta_pos = np.zeros((1, dim), dtype = float)
-    Delta_score = float(math.inf)    # change this to - float(math.inf) for maximization problems
+    Delta_pos = zeros((1, dim), dtype = float)
+    Delta_score = float(inf)    # change this to - float(math.inf) for maximization problems
 
     # Initialize the positions of search agents
     Positions = initialization(SearchAgents_no, dim, Ub, Lb)
     Positions = np.sort(Positions)
-    oldPositions = Positions.copy()
-    Convergence_curve = np.zeros((Max_iteration), dtype = float)
+    # oldPositions = Positions.copy()
+    Convergence_curve = zeros((Max_iteration), dtype = float)
 
     # Loop counter
     l = 0
 
-    fitness = np.zeros((SearchAgents_no), dtype= float)
-    fit_contain = np.zeros((SearchAgents_no, SearchAgents_no), dtype=float)
-    X1 = np.zeros((SearchAgents_no, dim), dtype= float)
-    X2 = np.zeros((SearchAgents_no, dim), dtype=float)
-    X3 = np.zeros((SearchAgents_no, dim), dtype=float)
+    fitness = zeros((SearchAgents_no), dtype= float)
+    fit_contain = zeros((SearchAgents_no, SearchAgents_no), dtype=float)
+    X1 = zeros((SearchAgents_no, dim), dtype= float)
+    X2 = zeros((SearchAgents_no, dim), dtype=float)
+    X3 = zeros((SearchAgents_no, dim), dtype=float)
 
     # Main loop
     for i in range(Max_iteration):
@@ -303,7 +307,7 @@ def GWO_CS(Function_name, Max_iteration, SearchAgents_no):
             # Return back the search agents that go beyond the boundaries of the search space
             Flag4Ub = Positions[j, :] > Ub
             Flag4Lb = Positions[j, :] < Lb
-            Positions[j, :] = (Positions[j, :]*np.logical_not(Flag4Ub + Flag4Lb)) + (Ub*Flag4Ub) + (Lb*Flag4Lb)
+            Positions[j, :] = (Positions[j, :]*logical_not(Flag4Ub + Flag4Lb)) + (Ub*Flag4Ub) + (Lb*Flag4Lb)
 
             # Calculate objective function for each search agent
             fitness = Fun(Positions[j, :]).copy()
@@ -349,8 +353,8 @@ def GWO_CS(Function_name, Max_iteration, SearchAgents_no):
         for ii in range(len(Positions)):
             for j in range(len(Positions[0])):
 
-                r1 = np.random.rand()  # r1 is a random number in [0, 1]
-                r2 = np.random.rand()  # r2 is a random number in [0, 1]
+                r1 = rand()  # r1 is a random number in [0, 1]
+                r2 = rand()  # r2 is a random number in [0, 1]
 
                 A1 = 2*a*r1 - a # Equation (3.3)
                 C1 = 2*r2       # Equation (3.4)
@@ -360,8 +364,8 @@ def GWO_CS(Function_name, Max_iteration, SearchAgents_no):
                 # Equation (3.6) - Part 1
                 X1[ii, j] = Alpha_pos[j] - A1*D_alpha
 
-                r1 = np.random.rand()  # r1 is a random number in [0, 1]
-                r2 = np.random.rand()  # r2 is a random number in [0, 1]
+                r1 = rand()  # r1 is a random number in [0, 1]
+                r2 = rand()  # r2 is a random number in [0, 1]
 
                 A2 = 2 * a * r1 - a  # Equation (3.3)
                 C2 = 2 * r2  # Equation (3.4)
@@ -371,8 +375,8 @@ def GWO_CS(Function_name, Max_iteration, SearchAgents_no):
                 # Equation (3.6) - Part 2
                 X2[ii, j] = Beta_pos[j] - A2 * D_beta
 
-                r1 = np.random.rand()  # r1 is a random number in [0, 1]
-                r2 = np.random.rand()  # r2 is a random number in [0, 1]
+                r1 = rand()  # r1 is a random number in [0, 1]
+                r2 = rand()  # r2 is a random number in [0, 1]
 
                 A3 = 2 * a * r1 - a  # Equation (3.3)
                 C3 = 2 * r2  # Equation (3.4)

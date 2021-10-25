@@ -72,6 +72,13 @@ start_time = time.time()
 print("Executation time for GWOCS:")
 print("--- %s seconds ---" % (time.time() - start_time))
 
+# Display the calculation
+print('The best solution obtained by GWO is: ', str(Best_pos))
+print('The best optimal value of the objective function found by GWO is: ', str(Best_score))
+print('The best solution obtained by GWOCS is: ', str(Best_pos_CS))
+print('The best optimal value of the objective function found by GWOCS is: ', str(Best_score_CS))
+
+
 # Plot
 #(PlotX, PlotY, PlotZ) = func_plot(Function_name)
 
@@ -110,9 +117,4 @@ ax.set_ylabel('Best score obtained so far', fontname = "Segoe UI", fontsize=SF, 
 leg = ax.legend(loc = 'upper right')
 plt.show()
 fig.savefig(filename_Figure, dpi=1000)
-# Display the calculation
-print('The best solution obtained by GWO is: ', str(Best_pos))
-print('The best optimal value of the objective function found by GWO is: ', str(Best_score))
-print('The best solution obtained by GWOCS is: ', str(Best_pos_CS))
-print('The best optimal value of the objective function found by GWOCS is: ', str(Best_score_CS))
 
