@@ -62,17 +62,13 @@ def func_plot(Function_name):
         x = np.arange(-100, 100, 2)
         y = np.arange(-100, 100, 2)
     if Function_name == 'p007_Booth':
-        d = 2
         Fun = lambda x: p007_Booth(x)
-        Lb = -10
-        Ub = 10
-        ptype = 1
+        x = np.arange(-100, 100, 2)
+        y = np.arange(-100, 100, 2)
     if Function_name == 'p010_Brent':
-        d = 2
         Fun = lambda x: p010_Brent(x)
-        Lb = -10
-        Ub = 10
-        ptype = 1
+        x = np.arange(-100, 100, 2)
+        y = np.arange(-100, 100, 2)
     if Function_name == 'p011_Brown':
         d = 15
         Fun = lambda x: p011_Brown(x)

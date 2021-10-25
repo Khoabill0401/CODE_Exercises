@@ -75,6 +75,7 @@ from py_hybrid_function.p080_StyblinskiTang import *
 from py_hybrid_function.p096_XinSheYang2 import *
 from py_hybrid_function.p098_XinSheYang4 import *
 from py_hybrid_function.p100_Zakharov import *
+from py_hybrid_function.solve10bar import *
 
 def GWO_CS(Function_name, Max_iteration, SearchAgents_no):
     # Determine what benchmark function
@@ -258,6 +259,13 @@ def GWO_CS(Function_name, Max_iteration, SearchAgents_no):
         Lb = -5
         Ub = 5
         ptype = 1
+    if Function_name == 'solve10bar':
+        d = 10 # number of design variables
+        Fun = lambda x: solve10bar(x)
+        Lb = 0.645e-4*np.ones((1, d), dtype=float).flatten()
+        Ub = 50e-4*np.ones((1, d), dtype=float).flatten()
+        ptype = 1
+        tol = 1e-6  # Tolerance for the stopping criterion
 
     # Initialize Alpha, Beta and Delta_pos
     dim = d
@@ -283,6 +291,7 @@ def GWO_CS(Function_name, Max_iteration, SearchAgents_no):
     l = 0
 
     fitness = np.zeros((SearchAgents_no), dtype= float)
+    fit_contain = np.zeros((SearchAgents_no, SearchAgents_no), dtype=float)
     X1 = np.zeros((SearchAgents_no, dim), dtype= float)
     X2 = np.zeros((SearchAgents_no, dim), dtype=float)
     X3 = np.zeros((SearchAgents_no, dim), dtype=float)
@@ -297,23 +306,41 @@ def GWO_CS(Function_name, Max_iteration, SearchAgents_no):
             Positions[j, :] = (Positions[j, :]*np.logical_not(Flag4Ub + Flag4Lb)) + (Ub*Flag4Ub) + (Lb*Flag4Lb)
 
             # Calculate objective function for each search agent
-            fitness[j] = Fun(Positions[j, :])
+            fitness = Fun(Positions[j, :]).copy()
+            fit_contain[j, :] = fitness.ravel()
 
             # Update Alpha, Beta and Delta
-            if fitness[j] < Alpha_score:
-                # Update Alpha
-                Alpha_score = fitness[j].copy()
-                Alpha_pos = Positions[j, :].copy()
+            if Function_name == 'solve10bar':
+                for iter in range(SearchAgents_no):
+                    if fitness[iter] < Alpha_score:
+                        # Update Alpha
+                        Alpha_score = fitness[iter].copy()
+                        Alpha_pos = Positions[j, :].copy()
 
-            if (fitness[j] > Alpha_score) and (fitness[j] < Beta_score):
-                # Update Beta
-                Beta_score = fitness[j].copy()
-                Beta_pos = Positions[j, :].copy()
+                    if (fitness[iter] > Alpha_score) and (fitness[iter] < Beta_score):
+                        # Update Beta
+                        Beta_score = fitness[iter].copy()
+                        Beta_pos = Positions[j, :].copy()
 
-            if (fitness[j] > Alpha_score) and (fitness[j] > Beta_score) and (fitness[j] < Delta_score):
-                # Update Delta
-                Delta_score = fitness[j].copy()
-                Delta_pos = Positions[j, :].copy()
+                    if (fitness[iter] > Alpha_score) and (fitness[iter] > Beta_score) and (fitness[iter] < Delta_score):
+                        # Update Delta
+                        Delta_score = fitness[iter].copy()
+                        Delta_pos = Positions[j, :].copy()
+            else:
+                if fitness < Alpha_score:
+                    # Update Alpha
+                    Alpha_score = fitness.copy()
+                    Alpha_pos = Positions[j, :].copy()
+
+                if (fitness > Alpha_score) and (fitness < Beta_score):
+                    # Update Beta
+                    Beta_score = fitness.copy()
+                    Beta_pos = Positions[j, :].copy()
+
+                if (fitness > Alpha_score) and (fitness > Beta_score) and (fitness < Delta_score):
+                    # Update Delta
+                    Delta_score = fitness.copy()
+                    Delta_pos = Positions[j, :].copy()
 
         # a decreases linearly from 2 to 0
         a = 2 - l*(2/Max_iteration)
@@ -359,10 +386,14 @@ def GWO_CS(Function_name, Max_iteration, SearchAgents_no):
         Cuckoo Search integrated here and take control from GWO
         # the key group parameters in GWO are updated by cuckoo search's position updation formula
         """
-        best = Positions[np.argmin(fitness), :]
-        X1 = get_cuckoos(X1, best, Lb, Ub)
-        X2 = get_cuckoos(X2, best, Lb, Ub)
-        X3 = get_cuckoos(X3, best, Lb, Ub)
+        cbest = Positions[np.argmin(fit_contain[0, :]), :]
+        for iter in range(SearchAgents_no):
+            best = Positions[np.argmin(fit_contain[iter, :]), :]
+            if (best < cbest).all():
+                cbest = best.copy()
+        X1 = get_cuckoos(X1, cbest, Lb, Ub)
+        X2 = get_cuckoos(X2, cbest, Lb, Ub)
+        X3 = get_cuckoos(X3, cbest, Lb, Ub)
 
         # Control is sent back to GWO
         # Equation (3.7)

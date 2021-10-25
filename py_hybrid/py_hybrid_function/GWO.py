@@ -39,6 +39,9 @@
 # 098. p098_XinSheYang4: XinSheYangFourth Function                                     #
 # 100. p100_Zakharov: Zakharov Function                                                #
 # ==================================================================================== #
+# ** Test for 10 - bar problem                                                         #
+# 101. solve10bar                                                                      #
+# ==================================================================================== #
 """
 import math
 import numpy as np
@@ -74,6 +77,7 @@ from py_hybrid_function.p080_StyblinskiTang import *
 from py_hybrid_function.p096_XinSheYang2 import *
 from py_hybrid_function.p098_XinSheYang4 import *
 from py_hybrid_function.p100_Zakharov import *
+from py_hybrid_function.solve10bar import *
 
 def GWO(Function_name, Max_iteration, SearchAgents_no):
 
@@ -258,6 +262,13 @@ def GWO(Function_name, Max_iteration, SearchAgents_no):
         Lb = -5
         Ub = 5
         ptype = 1
+    if Function_name == 'solve10bar':
+        d = 10 # number of design variables
+        Fun = lambda x: solve10bar(x)
+        Lb = 0.645e-4*np.ones((1, d), dtype=float).flatten()
+        Ub = 50e-4*np.ones((1, d), dtype=float).flatten()
+        ptype = 1
+        tol = 1e-6  # Tolerance for the stopping criterion
 
     # Main calculation
     dim = d
@@ -269,9 +280,17 @@ def GWO(Function_name, Max_iteration, SearchAgents_no):
     Beta_score = float(math.inf)    # change this to - float(math.inf) for maximization problems
 
     Delta_pos = np.zeros((1, dim), dtype = float)
-    Delta_score = float(math.inf)    # change this to - float(math.inf) for maximization problems
+    Delta_score = float(math.inf)   # change this to - float(math.inf) for maximization problems
 
     # Initialize the positions of search agents
+    #if Function_name == "solve10bar":
+    #    # Target vector
+    #    x = np.matlib.repmat(Lb, SearchAgents_no, 1) + np.random.uniform(0, 1, (SearchAgents_no, dim)) * np.matlib.repmat(Ub - Lb, SearchAgents_no, 1)
+
+    #    # Evaluate the objective function w.r.t constraints
+    #    (Positions) = Fun(x)
+    #else: Positions = initialization(SearchAgents_no, dim, Ub, Lb)
+
     Positions = initialization(SearchAgents_no, dim, Ub, Lb)
 
     Convergence_curve = np.zeros((Max_iteration), dtype = float)
@@ -290,20 +309,38 @@ def GWO(Function_name, Max_iteration, SearchAgents_no):
             fitness = Fun(Positions[j, :]).copy()
 
             # Update Alpha, Beta and Delta
-            if fitness < Alpha_score:
-                # Update Alpha
-                Alpha_score = fitness.copy()
-                Alpha_pos = Positions[j, :].copy()
+            if Function_name == 'solve10bar':
+                for iter in range(SearchAgents_no):
+                    if fitness[iter] < Alpha_score:
+                        # Update Alpha
+                        Alpha_score = fitness[iter].copy()
+                        Alpha_pos = Positions[j, :].copy()
 
-            if (fitness > Alpha_score) and (fitness < Beta_score):
-                # Update Beta
-                Beta_score = fitness.copy()
-                Beta_pos = Positions[j, :].copy()
+                    if (fitness[iter] > Alpha_score) and (fitness[iter] < Beta_score):
+                        # Update Beta
+                        Beta_score = fitness[iter].copy()
+                        Beta_pos = Positions[j, :].copy()
 
-            if (fitness > Alpha_score) and (fitness > Beta_score) and (fitness < Delta_score):
-                # Update Delta
-                Delta_score = fitness.copy()
-                Delta_pos = Positions[j, :].copy()
+                    if (fitness[iter] > Alpha_score) and (fitness[iter] > Beta_score) and (fitness[iter] < Delta_score):
+                        # Update Delta
+                        Delta_score = fitness[iter].copy()
+                        Delta_pos = Positions[j, :].copy()
+            else:
+                if fitness < Alpha_score:
+                    # Update Alpha
+                    Alpha_score = fitness.copy()
+                    Alpha_pos = Positions[j, :].copy()
+
+                if (fitness > Alpha_score) and (fitness < Beta_score):
+                    # Update Beta
+                    Beta_score = fitness.copy()
+                    Beta_pos = Positions[j, :].copy()
+
+                if (fitness > Alpha_score) and (fitness > Beta_score) and (fitness < Delta_score):
+                    # Update Delta
+                    Delta_score = fitness.copy()
+                    Delta_pos = Positions[j, :].copy()
+
 
         # a decreases linearly from 2 to 0
         a = 2 - l*(2/Max_iteration)

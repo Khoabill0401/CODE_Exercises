@@ -41,6 +41,9 @@
 # 098. p098_XinSheYang4: XinSheYangFourth Function                                     #
 # 100. p100_Zakharov: Zakharov Function                                                #
 # ==================================================================================== #
+# ** Test for 10 - bar problem                                                         #
+# 101. solve10bar                                                                      #
+# ==================================================================================== #
 """
 import time
 import matplotlib.pyplot as plt
@@ -51,7 +54,7 @@ from py_hybrid_function.func_plot import *
 # Number of search agents
 SearchAgents_no = 20
 # Name of the test function
-Function_name = 'p006_Bohachevsky'
+Function_name = 'solve10bar'
 # Maximum number of iterations
 Max_iteration = 500
 
@@ -70,7 +73,7 @@ print("Executation time for GWOCS:")
 print("--- %s seconds ---" % (time.time() - start_time))
 
 # Plot
-(PlotX, PlotY, PlotZ) = func_plot(Function_name)
+#(PlotX, PlotY, PlotZ) = func_plot(Function_name)
 
 # Draw objective space
 Algorithm = 'GWO_and_GWOCS_comparison'
@@ -86,14 +89,15 @@ fig = plt.figure()   #figsize=plt.figaspect(2.))
 fig.suptitle('Comparison of GWO and GWOCS')
 
 #Plot 3D
-ax = fig.add_subplot(121, projection = '3d')
-surf = ax.plot_surface(PlotX, PlotY, PlotZ, cmap = 'viridis', rstride=1, cstride=1, linewidth=0, antialiased=False)
-ax.set_title('3D Graph', fontname = "Segoe UI", fontsize = SF, color = 'k')
+#ax = fig.add_subplot(121, projection = '3d')
+#surf = ax.plot_surface(PlotX, PlotY, PlotZ, cmap = 'viridis', rstride=1, cstride=1, linewidth=0, antialiased=False)
+#ax.set_title('3D Graph', fontname = "Segoe UI", fontsize = SF, color = 'k')
 
-fig.tight_layout(pad=4.0)
+#fig.tight_layout(pad=4.0)
 
 # line plot of best objective function values
-ax = fig.add_subplot(122)
+#ax = fig.add_subplot(122)
+ax = fig.add_subplot()
 if ptype == 0:
     ax.semilogy(GWO_cg_curve, label="GWO", color='b', linewidth=3)
     ax.semilogy(GWOCS_cg_curve, label = "GWOCS", color = 'r', linestyle = '-.', linewidth=2)

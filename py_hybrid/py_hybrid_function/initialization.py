@@ -16,6 +16,7 @@ def initialization(SearchAgents_no, dim, Ub, Lb):
         Boundary_no = len(Ub)
     # If the boundaries of all variables are equal and user enter a single
     # number for both Ub and Lb
+    Positions = np.zeros((SearchAgents_no, dim), dtype=float)
 
     if Boundary_no == 1:
         Positions = np.random.rand(SearchAgents_no, dim)*(Ub - Lb) + Lb
@@ -25,6 +26,6 @@ def initialization(SearchAgents_no, dim, Ub, Lb):
         for i in range(dim):
             Ub_i = Ub[i].copy()
             Lb_i = Lb[i].copy()
-            Positions[:, i] = np.random.rand(SearchAgents_no, 1)*(Ub_i - Lb_i) + Lb_i
+            Positions[:, i] = (np.random.rand(SearchAgents_no, 1)*(Ub_i - Lb_i) + Lb_i).ravel()
 
     return (Positions)
