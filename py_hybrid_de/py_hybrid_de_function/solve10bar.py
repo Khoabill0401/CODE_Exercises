@@ -1,5 +1,5 @@
 import numpy as np
-from py_hybrid_function.FEM_10_bar_2D import *
+from py_hybrid_de_function.FEM_10_bar_2D import *
 
 def solve10bar(x):
     NP = 20

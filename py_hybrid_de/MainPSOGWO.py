@@ -1,21 +1,7 @@
 """
 %====================================================================================%
-% Hybrid Differential Evolution Algorithm With Adaptive Crossover Mechanism - DE_TCR %
-%                                                                                    %
 % Student: Trang Si Tan Khang                                                        %
 % Code: 1810215                                                                      %
-%                                                                                    %
-% Basic features of the algorithm are:                                               %
-% 1. It uses a population management mechanims to improve exploration                %
-% 2. It has an adaptive mechanism for crossover rate                                 %
-% 3. It uses a local search routine to improve convergence                           %
-%                                                                                    %
-% Scripts and functions listing:                                                     %
-% Main.py              - Main script to run the algorithm                            %
-% DE_TCR.py            - The optimization algorithm                                  %
-% DE_TCRparam.py       - Script to build the struct required for the optimization    %
-% LocalSearch.py       - The Local Search subroutine                                 %
-% CostFunction.py      - Cost function definition                                    %
 %====================================================================================%
 """
 import time
@@ -25,18 +11,18 @@ from py_hybrid_de_function.GWO import *
 from py_hybrid_de_function.func_plot import *
 
 SearchAgents_no = 30           # Number of search agents
-Function_name = 'F18'          # Name of the test function
+Function_name = 'p001_Ackley'          # Name of the test function
 Max_iteration = 500            # Maximum number of iterations
 
 # PSOGWO part:
 start_time = time.time()
-(Best_score, Best_pos, PSOGWO_cg_curve, ptype) = PSOGWO(SearchAgents_no, Max_iteration, Function_name)
+(Best_score, Best_pos, PSOGWO_cg_curve, ptype) = PSOGWO(Function_name, Max_iteration, SearchAgents_no)
 print("Executation time for PSOGWO:")
 print("--- %s seconds ---" % (time.time() - start_time))
 
 # GWO part:
 start_time = time.time()
-(Alpha_score, Alpha_pos, GWO_cg_curve, ptype) = GWO(SearchAgents_no, Max_iteration, Function_name)
+(Alpha_score, Alpha_pos, GWO_cg_curve, ptype) = GWO(Function_name, Max_iteration, SearchAgents_no)
 print("Executation time for GWO:")
 print("--- %s seconds ---" % (time.time() - start_time))
 

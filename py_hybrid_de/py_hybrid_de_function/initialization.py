@@ -1,11 +1,3 @@
-"""
-# ==================================================================================== #
-# This work has been done by:                                                          #
-# Nguyen Anh Khoa  - 1810240                                                           #
-# Phone: 0868.840.441                                                                  #
-# Email: khoa.nguyen41@hcmut.edu.vn                                                    #
-# ==================================================================================== #
-"""
 import numpy as np
 from numpy.random import rand
 from numpy import zeros

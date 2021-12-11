@@ -83,7 +83,7 @@ from py_hybrid_de_function.p098_XinSheYang4 import *
 from py_hybrid_de_function.p100_Zakharov import *
 from py_hybrid_de_function.solve10bar import *
 
-def GWO(Function_name, Max_iteration, SearchAgents_no, count1):
+def GWO(Function_name, Max_iteration, SearchAgents_no):
 
     # Determine what benchmark function
     if Function_name == 'p001_Ackley':
@@ -309,7 +309,6 @@ def GWO(Function_name, Max_iteration, SearchAgents_no, count1):
 
             # Calculate objective function for each search agent
             fitness = Fun(Positions[j, :]).copy()
-            count1 += 1
 
             # Update Alpha, Beta and Delta
             if Function_name == 'solve10bar':

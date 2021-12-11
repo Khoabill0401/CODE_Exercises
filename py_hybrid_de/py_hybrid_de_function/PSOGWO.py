@@ -2,11 +2,6 @@
 # ==================================================================================== #
 # Grey Wolf Optimizer                                                                  #
 # ==================================================================================== #
-# This work has been done by:                                                          #
-# Nguyen Anh Khoa  - 1810240                                                           #
-# Phone: 0868.840.441                                                                  #
-# Email: khoa.nguyen41@hcmut.edu.vn                                                    #
-# ==================================================================================== #
 # Provided Benchmark functions that we have tested:                                    #
 # 001. p001_Ackley: Ackley Function                                                    #
 # 002. p002_Alpine: Alpine Function                                                    #
@@ -49,6 +44,7 @@ import numpy as np
 from numpy import zeros
 from numpy import logical_not
 from numpy.random import rand
+from numpy.random import randn
 import random
 from py_hybrid_de_function.initialization import *
 from py_hybrid_de_function.p001_Ackley import *
@@ -83,8 +79,10 @@ from py_hybrid_de_function.p098_XinSheYang4 import *
 from py_hybrid_de_function.p100_Zakharov import *
 from py_hybrid_de_function.solve10bar import *
 
-def PSOGWO(Function_name, Max_iteration, SearchAgents_no, count1):
-
+def PSOGWO(Function_name, Max_iteration, SearchAgents_no):
+    d = 0
+    Ub = 0
+    Lb = 0
     # Determine what benchmark function
     if Function_name == 'p001_Ackley':
         d = 30
@@ -273,3 +271,93 @@ def PSOGWO(Function_name, Max_iteration, SearchAgents_no, count1):
         Ub = 50e-4*np.ones((1, d), dtype=float).flatten()
         ptype = 1
         tol = 1e-6  # Tolerance for the stopping criterion
+
+    #print(d)
+    # Initialize alpha, beta, and delta_pos
+    Alpha_pos = zeros((1, d), dtype= float)
+    Alpha_score = float(inf)  # change this to -inf for maximization problems
+
+    Beta_pos = zeros((1, d), dtype= float)
+    Beta_score = float(inf)   # change this to -inf for maximization problems
+
+    Delta_pos = zeros((1, d), dtype= float)
+    Delta_score = float(inf)  # change this to -inf for maximization problems
+
+    # Initialize the positions of search agents
+    Positions = initialization(SearchAgents_no, d, Ub, Lb)
+    Convergence_curve = zeros((Max_iteration), dtype= float)
+    velocity = 0.3*randn(SearchAgents_no, d)
+    w = 0.5 + rand()/2
+
+    # Loop counter
+    cou = 0
+
+    for l in range(Max_iteration):
+        for i in range(len(Positions)):
+
+            # Return back the search agents that go beyond the boundaries of the search space
+            Flag4Ub = Positions[i, :] > Ub
+            Flag4Lb = Positions[i, :] < Lb
+            Positions[i, :] = (Positions[i, :]*logical_not(Flag4Ub + Flag4Lb)) + (Ub*Flag4Ub) + (Lb*Flag4Lb)
+
+            # Calculate objective function for each search agent
+            fitness = Fun(Positions[i, :]).copy()
+
+            # Update Alpha, Beta and Delta
+            if fitness < Alpha_score:
+                Alpha_score = fitness.copy()
+                Alpha_pos = Positions[i, :].copy()
+
+            if (fitness > Alpha_score) and (fitness < Beta_score):
+                Beta_score = fitness.copy()
+                Beta_pos = Positions[i, :].copy()
+
+            if (fitness > Alpha_score) and (fitness > Beta_score) and (fitness < Delta_score):
+                Delta_score = fitness.copy()
+                Delta_pos = Positions[i, :].copy()
+
+        a = 2 - 1*(2/Max_iteration)
+
+        # Update the Position of search agents including omegas
+        for i in range(len(Positions)):
+            for j in range(len(Positions[0])):
+                r1 = rand()  # r1 is a random number in [0, 1]
+                r2 = rand()  # r2 is a random number in [0, 1]
+
+                A1 = 2 * a * r1 - a  # Equation (3.3)
+                C1 = 0.5 # Equation (3.4)
+
+                D_alpha = abs(C1*Alpha_pos[j] - w*Positions[i, j])
+                X1 = Alpha_pos[j] - A1*D_alpha
+
+                r1 = rand()
+                r2 = rand()
+
+                A2 = 2 * a * r1 - a
+                C2 = 0.5
+
+                D_beta = abs(C2*Beta_pos[j] - w*Positions[i, j])
+                X2 = Beta_pos[j] - A2 * D_beta
+
+                r1 = rand()
+                r2 = rand()
+                r3 = rand()
+                A3 = 2 * a * r1 - a
+                C3 = 0.5
+
+                D_delta = abs(C3*Delta_pos[j] - w*Positions[i, j])
+                X3 = Delta_pos[j] - A3 * D_delta
+
+                # velocity updation
+                velocity[i, j] = w*(velocity[i, j] + C1*r1*(X1 - Positions[i, j]) + C2*r2*(X2 - Positions[i, j]) + C3*r3*(X3 - Positions[i, j]))
+
+                # positions update
+                Positions[i, j] = Positions[i, j] + velocity[i, j]
+
+        Convergence_curve[cou] = Alpha_score
+        cou += 1
+
+    return (Alpha_score, Alpha_pos, Convergence_curve, ptype)
+
+
+

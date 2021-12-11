@@ -2,7 +2,7 @@ import math
 import numpy as np
 from scipy.linalg import eigh
 
-from py_hybrid_function.Stiff_Mass_Force_Weight import *
+from py_hybrid_de_function.Stiff_Mass_Force_Weight import *
 
 def FEM_10_bar_2D(X):
     # Define the problem dimension
